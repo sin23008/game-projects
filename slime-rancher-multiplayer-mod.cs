@@ -12,7 +12,7 @@ namespace SlimeRancherMultiplayer
     public class MultiplayerMod : MonoBehaviour
     {
         // Configuration
-        private const int DEFAULT_PORT = 7777;fg
+        private const int DEFAULT_PORT = 7777;
         private const int MAX_PLAYERS = 4;
         private const float SYNC_INTERVAL = 0.1f; // Seconds between sync
 
@@ -41,7 +41,8 @@ namespace SlimeRancherMultiplayer
             networkManager = gameObject.AddComponent<NetworkManager>();
 
             // Register event handlers
-            SceneContext.Instance.GameModel.onPause += OnGamePause;
+            if (SceneContext.Instance != null && SceneContext.Instance.GameModel != null)
+                SceneContext.Instance.GameModel.onPause += OnGamePause;
         }
 
         void OnDestroy()
@@ -523,7 +524,20 @@ namespace SlimeRancherMultiplayer
         private void OnGamePause(bool paused)
         {
             // Handle game pause/unpause
-            // This might affect networking behavior
+            if (paused)
+            {
+                // Pause network updates
+                CancelInvoke("SyncGameState");
+                CancelInvoke("SendPlayerUpdate");
+            }
+            else
+            {
+                // Resume network updates
+                if (isHost)
+                    InvokeRepeating("SyncGameState", 0f, SYNC_INTERVAL);
+                else
+                    InvokeRepeating("SendPlayerUpdate", 0f, SYNC_INTERVAL);
+            }
         }
 
         #endregion
@@ -994,7 +1008,8 @@ namespace SlimeRancherMultiplayer
                     return ChatMessage.Deserialize(data);
 
                 default:
-                    throw new ArgumentException($"Unknown message type: {type}");
+                    Debug.LogError($"Unknown message type: {type}");
+                    return null;
             }
         }
     }
@@ -1006,9 +1021,7 @@ namespace SlimeRancherMultiplayer
         public float Health { get; set; }
         public float Energy { get; set; }
         public int EquippedSlot { get; set; }
-        public List<InventoryItemData
-
-public List<InventoryItemData> InventoryItems { get; set; } = new List<InventoryItemData>();
+        public List<InventoryItemData> InventoryItems { get; set; } = new List<InventoryItemData>();
 
         public PlayerUpdateMessage()
         {

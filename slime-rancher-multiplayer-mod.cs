@@ -27,7 +27,7 @@ namespace SlimeRancherMultiplayer
         private bool isHost = false;
 
         // UI components
-        private MultiplayerUI ui;
+        private MultiplayerUI ui; // Custom UI for multiplayer
 
         void Awake()
         {

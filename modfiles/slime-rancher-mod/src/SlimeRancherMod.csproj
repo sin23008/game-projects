@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SlimeRancherMod</AssemblyName>
+    <RootNamespace>SlimeRancherMod</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UnityEngine" Version="2020.3.0f1" />
+    <PackageReference Include="MonomiPark.SlimeRancher" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="src\SlimeRancherMod.cs" />
+    <Compile Include="src\Network\NetworkManager.cs" />
+    <Compile Include="src\Network\Server.cs" />
+    <Compile Include="src\Network\Client.cs" />
+    <Compile Include="src\UI\MultiplayerUI.cs" />
+    <Compile Include="src\Data\NetworkMessages.cs" />
+    <Compile Include="src\Models\RemotePlayer.cs" />
+  </ItemGroup>
+
+</Project>
